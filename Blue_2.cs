@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 
 namespace Lab_8
@@ -17,7 +17,7 @@ namespace Lab_8
 
         public override void Review()
         {
-            if (Input == null || _delet == null)
+            if (Input == null || _delet == null || _delet.Length == 0)
             {
                 _output = string.Empty;
                 return;
@@ -27,42 +27,41 @@ namespace Lab_8
             var result = new StringBuilder();
             bool firstWord = true;
 
-            for (int i = 0; i < words.Length; i++)
+            foreach (string word in words)
             {
-                string word = words[i];
-                bool containsSequence = false;
-
-                for (int j = 0; j <= word.Length - _delet.Length; j++)
+                if (!ContainsSequence(word, _delet))
                 {
-                    bool match = true;
-                    for (int k = 0; k < _delet.Length; k++)
+                    if (!firstWord)
                     {
-                        if (char.ToLower(word[j + k]) != char.ToLower(_delet[k]))
-                        {
-                            match = false;
-                            break;
-                        }
+                        result.Append(" ");
                     }
-                    containsSequence = match ? true : containsSequence;
-                }
-
-                if (!containsSequence)
-                {
-                    result.Append(firstWord ? word : " " + word);
+                    result.Append(word);
                     firstWord = false;
-                }
-                else
-                {
-                    string punctuation = GetPunctuation(word);
-                    if (punctuation.Length > 0)
-                    {
-                        result.Append(firstWord ? punctuation : " " + punctuation);
-                        firstWord = false;
-                    }
                 }
             }
 
             _output = result.ToString();
+        }
+
+        private bool ContainsSequence(string word, string sequence)
+        {
+            for (int i = 0; i <= word.Length - sequence.Length; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < sequence.Length; j++)
+                {
+                    if (char.ToLower(word[i + j]) != char.ToLower(sequence[j]))
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private string[] SplitIntoWords(string input)
@@ -73,7 +72,7 @@ namespace Lab_8
 
             for (int i = 0; i < input.Length; i++)
             {
-                if (input[i] != ' ')
+                if (!char.IsWhiteSpace(input[i]))
                 {
                     if (!inWord)
                     {
@@ -96,38 +95,9 @@ namespace Lab_8
             return words.ToArray();
         }
 
-        private string GetPunctuation(string word)
-        {
-            var punctuation = new StringBuilder();
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (i == 0 || i == word.Length - 2 || i == word.Length - 1)
-                {
-                    if (IsPunctuation(word[i]))
-                    {
-                        punctuation.Append(word[i]);
-                    }
-                }
-            }
-            return punctuation.ToString();
-        }
-
-        private bool IsPunctuation(char c)
-        {
-            char[] punctuations = { '.', ',', ';', ':', '!', '?', '"', '(', ')', '[', ']', '{', '}', '/', '–' };
-            for (int i = 0; i < punctuations.Length; i++)
-            {
-                if (c == punctuations[i])
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public override string ToString()
         {
-            return _output == null || _output.Length == 0 ? string.Empty : _output;
+            return _output ?? string.Empty;
         }
     }
 }
