@@ -31,17 +31,17 @@ namespace Lab_8
             {
                 if (string.IsNullOrWhiteSpace(item) || string.IsNullOrEmpty(item)) continue;
 
-                if (!item.ToLower().Contains(_lastPart.ToLower()))
+                if (!word.ToLower().Contains(_delet.ToLower()))
                 {
                     result += firstWord + word;
                     firstWord = " ";
                 }
-                else if (item.Length > 0 && !(char.IsLetter(item[0])))
+                else if (word.Length > 0 && !(char.IsLetter(word[0])))
                 {
                     result += " " + word[0] + word[0];
                     firstWord = " ";
                 }
-                if (item.ToLower().Contains(_lastPart.ToLower()) && item.Length > 0 && !(char.IsLetter(item[item.Length - 1])))
+                if (word.ToLower().Contains(_delet.ToLower()) && word.Length > 0 && !(char.IsLetter(word[word.Length - 1])))
                 {
                     result += word[word.Length - 1];
                     firstWord = " ";
