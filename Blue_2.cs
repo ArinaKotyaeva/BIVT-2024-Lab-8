@@ -23,7 +23,7 @@ namespace Lab_8
                 return;
             }
 
-            string[] words = _input.Split(' '); ;
+            string[] words = _input.Split(' '); 
             string result = "";
             string firstWord = "";
 
