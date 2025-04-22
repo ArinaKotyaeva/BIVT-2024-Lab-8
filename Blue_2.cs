@@ -23,81 +23,39 @@ namespace Lab_8
                 return;
             }
 
-            string[] words = SplitIntoWords(Input);
-            var result = new StringBuilder();
-            bool firstWord = true;
+            string[] words = _input.Split(' '); ;
+            string result = "";
+            string firstWord = "";
 
             foreach (string word in words)
             {
-                if (!ContainsSequence(word, _delet))
+                if (string.IsNullOrWhiteSpace(item) || string.IsNullOrEmpty(item)) continue;
+
+                if (!item.ToLower().Contains(_lastPart.ToLower()))
                 {
-                    if (!firstWord)
-                    {
-                        result.Append(" ");
-                    }
-                    result.Append(word);
-                    firstWord = false;
+                    result += firstWord + word;
+                    firstWord = " ";
+                }
+                else if (item.Length > 0 && !(char.IsLetter(item[0])))
+                {
+                    result += " " + word[0] + word[0];
+                    firstWord = " ";
+                }
+                if (item.ToLower().Contains(_lastPart.ToLower()) && item.Length > 0 && !(char.IsLetter(item[item.Length - 1])))
+                {
+                    result += word[word.Length - 1];
+                    firstWord = " ";
                 }
             }
-
-            _output = result.ToString();
-        }
-
-        private bool ContainsSequence(string word, string sequence)
-        {
-            for (int i = 0; i <= word.Length - sequence.Length; i++)
-            {
-                bool match = true;
-                for (int j = 0; j < sequence.Length; j++)
-                {
-                    if (char.ToLower(word[i + j]) != char.ToLower(sequence[j]))
-                    {
-                        match = false;
-                        break;
-                    }
-                }
-                if (match)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private string[] SplitIntoWords(string input)
-        {
-            var words = new System.Collections.Generic.List<string>();
-            int start = 0;
-            bool inWord = false;
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (!char.IsWhiteSpace(input[i]))
-                {
-                    if (!inWord)
-                    {
-                        start = i;
-                        inWord = true;
-                    }
-                }
-                else if (inWord)
-                {
-                    words.Add(input.Substring(start, i - start));
-                    inWord = false;
-                }
-            }
-
-            if (inWord)
-            {
-                words.Add(input.Substring(start));
-            }
-
-            return words.ToArray();
+            _output = result;
         }
 
         public override string ToString()
         {
-            return _output ?? string.Empty;
+            if (string.IsNullOrEmpty(_output))
+                return string.Empty;
+
+            return _output;
         }
     }
 }
