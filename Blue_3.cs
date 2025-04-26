@@ -17,7 +17,7 @@ namespace Lab_8
                 Array.Copy(_output, copy, _output.Length);
                 return copy;
             }
-        };
+        } 
 
         public Blue_3(string input) : base(input)
         {
@@ -32,39 +32,48 @@ namespace Lab_8
                 return;
             }
 
-            char[] signs = { ' ', '.', '!', '?', ',', ':', '\"', ';', '–', '(', ')', '[', ']', '{', '}', '/' };
-            string words = Input.Split(signs, StringSplitOptions.RemoveEmptyEntries); ;
-            int count_l = new int[char.MaxValue];
+            string[] words = Input.Split(' ', '.', '!', '?', ',', ':', '\"', ';', '–', '(', ')', '[', ']', '{', '}', '/');
+            if (words.Length == 0) return;
+
+            (char, double)[] count_l = new (char, double)[words.Length];
             int count_w = 0;
+            int uni = 0;
 
             foreach (string word in words)
             {
-                if (word.Length == 0) continue;
+                if (string.IsNullOrEmpty(word)) continue;
 
                 char first = char.ToLower(word[0]);
-                if (char.IsLetter(first))
+                bool found = false;
+
+                for (int i = 0; i < uni; i++)
                 {
-                    count_l[first]++;
-                    count_w++;
+                    if (char.IsLetter(count_l[i].Item1))
+                    {
+                        if (count_l[i].Item1 == first)
+                        {
+                            count_l[i] = (first, count_l[i].Item2 + 1);
+                            found = true;
+                            count_w++;
+                            break;
+                        }
+                    }
                 }
 
-            }
-            int uni = 0;
-            for (int i = 0; i < count_l.Length; i++)
-            {
-                if (count_l[i] > 0) uni++;
+                if (!found && char.IsLetter(first))
+                {
+                    count_l[uni] = (first, 1);
+                    uni++;
+                    count_w++;
+                }
             }
 
             _output = new (char, double)[uni];
-            int ind = 0;
 
-            for (int i = 0; i < count_l.Length; i++)
+            for (int i = 0; i < uni; i++)
             {
-                if (count_l[i] > 0)
-                {
-                    double res = Math.Round(count_l[i] * 100.0 / count_w, 4);
-                    _output[ind++] = ((char)i, res);
-                }
+                double res = Math.Round(count_l[i].Item2 * 100.0 / count_w, 4);
+                _output[i] = (count_l[i].Item1, res);
             }
 
             Array.Sort(_output, (x, y) =>
@@ -76,13 +85,15 @@ namespace Lab_8
 
         public override string ToString()
         {
-            string result = "";
+            if (_output == null) return string.Empty;
+
+            StringBuilder result = new StringBuilder();
             for (int i = 0; i < _output.Length; i++)
             {
-                result += $"{_output[i].letter} - {_output[i].percent:f4}";
-                if (i != _output.Length - 1) result += "\n";
+                result.Append($"{_output[i].Item1} - {_output[i].Item2:f4}");
+                if (i != _output.Length - 1) result.AppendLine();
             }
-            return result;
+            return result.ToString();
         }
     }
 }
