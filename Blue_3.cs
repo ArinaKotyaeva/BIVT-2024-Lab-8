@@ -17,7 +17,7 @@ namespace Lab_8
                 Array.Copy(_output, copy, _output.Length);
                 return copy;
             }
-        } 
+        }
 
         public Blue_3(string input) : base(input)
         {
@@ -85,15 +85,14 @@ namespace Lab_8
 
         public override string ToString()
         {
+            string result = "";
             if (_output == null) return string.Empty;
-
-            StringBuilder result = new StringBuilder();
             for (int i = 0; i < _output.Length; i++)
             {
-                result.Append($"{_output[i].Item1} - {_output[i].Item2:f4}");
-                if (i != _output.Length - 1) result.AppendLine();
+                result += $"{_output[i].Item1} - {_output[i].Item2:f4}";
+                if (i != _output.Length - 1) result += "\n";
             }
-            return result.ToString();
+            return result;
         }
     }
 }
