@@ -29,7 +29,7 @@ namespace Lab_8
 
             foreach (string word in words)
             {
-                if (string.IsNullOrWhiteSpace(item) || string.IsNullOrEmpty(item)) continue;
+                if (string.IsNullOrWhiteSpace(word) || string.IsNullOrEmpty(word)) continue;
 
                 if (!word.ToLower().Contains(_delet.ToLower()))
                 {
