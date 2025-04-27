@@ -85,14 +85,13 @@ namespace Lab_8
 
         public override string ToString()
         {
-            string result = "";
             if (_output == null) return string.Empty;
-            for (int i = 0; i < _output.Length; i++)
+            var result = new StringBuilder();
+            foreach (var index in _output)
             {
-                result += $"{_output[i].Item1} - {_output[i].Item2:f4}";
-                if (i != _output.Length - 1) result += "\n";
+                result.AppendLine($"{index.Item1} - {index.Item2:F4}");
             }
-            return result;
+            return result.ToString().Trim();
         }
     }
 }
